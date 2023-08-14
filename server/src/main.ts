@@ -4,13 +4,16 @@ import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import * as express from 'express';
 import { join } from 'path';
 import { ValidationPipe } from '@nestjs/common';
+import { validationExceptionFactory } from './shared/exceptions/validation.exception';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, { cors: false });
 
   app.enableCors({ credentials: true, origin: true });
 
-  app.useGlobalPipes(new ValidationPipe());
+  app.useGlobalPipes(
+    new ValidationPipe({ exceptionFactory: validationExceptionFactory }),
+  );
 
   app.use('/uploads', express.static(join(__dirname, '..', 'uploads')));
 
