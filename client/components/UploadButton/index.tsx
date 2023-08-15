@@ -11,7 +11,7 @@ export const UploadButton = () => {
 
   const onUploadSuccess = useCallback(async (options: any) => {
     try {
-      const file = await Api.files.uploadFile(options);
+      await Api.files.uploadFile(options);
 
       setFileList([]);
     } catch (error) {
