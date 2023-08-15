@@ -1,8 +1,10 @@
 import { LoginForm, RegisterForm } from "@/components/auth";
 import { Tabs } from "antd";
-import { NextPage } from "next";
+import { GetServerSidePropsContext, NextPage } from "next";
 import Head from "next/head";
 import React, { useCallback, useMemo, useState } from "react";
+
+import * as utils from "@/utils";
 
 const AuthPage: NextPage = () => {
   const [activeTab, setActiveTab] = useState<string>("1");
@@ -38,6 +40,23 @@ const AuthPage: NextPage = () => {
       </main>
     </>
   );
+};
+
+export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
+  const authProps = await utils.checkAuth(ctx);
+
+  if (authProps.props) {
+    return {
+      redirect: {
+        destination: "/dashboard",
+        permanent: false,
+      },
+    };
+  }
+
+  return {
+    props: {},
+  };
 };
 
 export default AuthPage;

@@ -4,7 +4,6 @@ import { parseCookies } from "nookies";
 import * as utils from "@/utils";
 
 const handleAxiosError = (error: any) => {
-  console.log(error);
   const errorData = error.response?.data;
 
   const parsedErrors = utils.parseErrors(errorData) || "An error has occurred.";

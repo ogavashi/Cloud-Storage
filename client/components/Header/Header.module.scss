@@ -1,0 +1,42 @@
+.root {
+  background-color: #52c41a !important;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: white;
+
+  :global {
+    .ant-menu {
+      background-color: transparent !important;
+    }
+  }
+}
+
+.headerInner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 1200px;
+  margin: 0 auto;
+}
+
+.headerLeft {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+}
+
+.topMenu {
+  min-width: 200px;
+  :global {
+    .ant-menu-item-selected {
+      color: #ffffff !important;
+      background-color: rgb(255 255 255 / 15%) !important;
+      border-radius: 0 !important;
+    }
+  }
+}
+
+.headerRight {
+  cursor: pointer;
+}
