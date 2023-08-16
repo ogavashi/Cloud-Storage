@@ -11,7 +11,7 @@ import { GetServerSidePropsContext, NextPage } from "next";
 import * as utils from "@/utils";
 import * as Api from "@/api";
 import { User } from "@/api/dto/auth.dto";
-import { NextPageWithLayout } from "../_app";
+import { NextPageWithLayout } from "./_app";
 
 interface Props {
   userData: User;

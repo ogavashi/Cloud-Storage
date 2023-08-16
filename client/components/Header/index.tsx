@@ -9,7 +9,7 @@ import * as Api from "@/api";
 
 export const Header = () => {
   const router = useRouter();
-  const selectedMenu = router.pathname;
+  const selectedMenu = "/" + router.pathname.split("/").at(1);
 
   const navigate = useCallback(
     ({ key }: { key: string }) => {
@@ -41,7 +41,7 @@ export const Header = () => {
             onSelect={navigate}
             items={[
               { key: "/dashboard", label: "Dasboard" },
-              { key: "/dashboard/profile", label: "Profile" },
+              { key: "/profile", label: "Profile" },
             ]}
           />
         </div>

@@ -3,25 +3,26 @@ import * as utils from "@/utils";
 import { Layout } from "@/layouts/Layout";
 import { NextPageWithLayout } from "@/pages/_app";
 import { FileItem } from "@/api/dto/files.dto";
+import { FileList } from "@/components/FileList";
 import { DashboardLayout } from "@/layouts/DashboardLayout";
 
 import * as Api from "@/api";
 import { Files } from "@/modules/Files";
 
-type DashboardPageProps = {
+type DashboardTrashCanProps = {
   items: FileItem[];
 };
 
-const DashboardPage: NextPageWithLayout<DashboardPageProps> = ({ items }) => {
+const DashboardTrashCan: NextPageWithLayout<DashboardTrashCanProps> = ({ items }) => {
   return (
     <DashboardLayout>
-      <Files items={items} withActions />
+      <Files items={items} />
     </DashboardLayout>
   );
 };
 
-DashboardPage.getLayout = (page: React.ReactNode) => {
-  return <Layout title="Dashboard">{page} </Layout>;
+DashboardTrashCan.getLayout = (page: React.ReactNode) => {
+  return <Layout title="Dashboard / Trash can">{page} </Layout>;
 };
 
 export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
@@ -32,7 +33,7 @@ export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
   }
 
   try {
-    const items = await Api.files.getAll();
+    const items = await Api.files.getAll("trash");
 
     return {
       props: {
@@ -48,4 +49,4 @@ export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
   }
 };
 
-export default DashboardPage;
+export default DashboardTrashCan;

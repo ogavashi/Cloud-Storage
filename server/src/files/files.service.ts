@@ -16,7 +16,7 @@ export class FilesService {
     qb.where('file.userId = :userId', { userId });
 
     if (fileType === FileType.PHOTOS) {
-      qb.andWhere('file.mimetype ILIKE :type', { type: '$image%' });
+      qb.andWhere('file.mimetype ILIKE :type', { type: '%image%' });
     }
 
     if (fileType === FileType.TRASH) {
