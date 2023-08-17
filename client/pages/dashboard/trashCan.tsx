@@ -16,7 +16,7 @@ type DashboardTrashCanProps = {
 const DashboardTrashCan: NextPageWithLayout<DashboardTrashCanProps> = ({ items }) => {
   return (
     <DashboardLayout>
-      <Files items={items} />
+      <Files items={items} isTrashCan withActions />
     </DashboardLayout>
   );
 };

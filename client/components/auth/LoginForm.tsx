@@ -5,8 +5,11 @@ import { LoginFormDTO } from "@/api/dto/auth.dto";
 
 import { setCookie } from "nookies";
 import * as Api from "@/api";
+import { useRouter } from "next/router";
 
 export const LoginForm: React.FC = () => {
+  const router = useRouter();
+
   const onSubmit = useCallback(async (values: LoginFormDTO) => {
     try {
       const { token } = await Api.auth.login(values);
@@ -17,6 +20,7 @@ export const LoginForm: React.FC = () => {
       });
 
       setCookie(null, "_token", token, { path: "/" });
+      router.push("/dashboard");
     } catch (error) {
       if (error instanceof Error) {
         notification.error({

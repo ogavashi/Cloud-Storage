@@ -1,3 +1,6 @@
+import * as path from 'path';
+import * as fs from 'fs';
+
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { FileEntity, FileType } from './entities/file.entity';
@@ -11,16 +14,16 @@ export class FilesService {
   ) {}
 
   findAll(userId: number, fileType: FileType) {
-    const qb = this.repository.createQueryBuilder('file');
+    const qb = this.repository.createQueryBuilder('files');
 
-    qb.where('file.userId = :userId', { userId });
+    qb.where('files.userId = :userId', { userId });
 
     if (fileType === FileType.PHOTOS) {
-      qb.andWhere('file.mimetype ILIKE :type', { type: '%image%' });
+      qb.andWhere('files.mimetype ILIKE :type', { type: '%image%' });
     }
 
     if (fileType === FileType.TRASH) {
-      qb.withDeleted().andWhere('file.deletedAt IS NOT NULL');
+      qb.withDeleted().andWhere('files.deletedAt IS NOT NULL');
     }
 
     return qb.getMany();
@@ -39,7 +42,7 @@ export class FilesService {
   async remove(userId: number, ids: string) {
     const idsArray = ids.split(',');
 
-    const qb = this.repository.createQueryBuilder('file');
+    const qb = this.repository.createQueryBuilder('files');
 
     qb.where('id IN (:...ids) AND userId = :userId', {
       ids: idsArray,
@@ -47,5 +50,53 @@ export class FilesService {
     });
 
     return qb.softDelete().execute();
+  }
+
+  async delete(userId: number, ids: string) {
+    const idsArray = ids.split(',');
+
+    const qb = this.repository.createQueryBuilder('files');
+
+    qb.withDeleted()
+      .leftJoin('files.user', 'user')
+      .where('files.id IN (:...ids) AND user.id = :userId', {
+        ids: idsArray,
+        userId,
+      });
+
+    const qbClone = qb.clone();
+
+    const filesToRemove = await qbClone.getRawMany();
+
+    if (!!!filesToRemove.length) {
+      return;
+    }
+
+    const fileNamesToRemove = filesToRemove.map(
+      ({ files_filename }) => files_filename,
+    );
+
+    const basePath = path.join(process.cwd(), '..', 'server', 'uploads');
+
+    fileNamesToRemove.forEach((fileName) => {
+      const filePath = path.join(basePath, fileName);
+
+      fs.unlinkSync(filePath);
+    });
+
+    return qb.delete().execute();
+  }
+
+  async restore(userId: number, ids: string) {
+    const idsArray = ids.split(',');
+
+    const qb = this.repository.createQueryBuilder('files');
+
+    qb.where('id IN (:...ids) AND userId = :userId', {
+      ids: idsArray,
+      userId,
+    });
+
+    return qb.restore().execute();
   }
 }

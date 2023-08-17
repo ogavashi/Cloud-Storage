@@ -3,6 +3,7 @@ import { FileItem } from "@/api/dto/files.dto";
 import styles from "./FileList.module.scss";
 import { FileCard } from "../FileCard";
 import Selecto from "react-selecto";
+import { MutableRefObject } from "react";
 
 export type FileSelectType = "select" | "unselect";
 

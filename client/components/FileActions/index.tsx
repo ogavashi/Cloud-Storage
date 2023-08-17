@@ -1,36 +1,53 @@
 import React from "react";
 import styles from "./FileActions.module.scss";
 import { Button, Popconfirm } from "antd";
+import { DownloadOutlined } from "@ant-design/icons";
 
 type FileActionsProps = {
   onClickRemove: VoidFunction;
-  onClickShare: VoidFunction;
-  isActive: boolean;
+  onRemoveAll: VoidFunction;
+  onDownloadFile: VoidFunction;
+  selectedAmount: number;
+  isLoading: boolean;
 };
 
 export const FileActions: React.FC<FileActionsProps> = ({
   onClickRemove,
-  onClickShare,
-  isActive,
+  onRemoveAll,
+  onDownloadFile,
+  selectedAmount,
+  isLoading,
 }) => {
+  const isActive = !!selectedAmount;
+
   return (
     <div className={styles.root}>
-      <Button onClick={onClickShare} disabled={!isActive}>
-        Share
-      </Button>
-
-      <Popconfirm
-        title="Delete file(s) ?"
-        description="All files will be moved to trah can"
-        okText="Yes"
-        cancelText="No"
-        disabled={!isActive}
-        onConfirm={onClickRemove}
-      >
-        <Button disabled={!isActive} type="primary" danger>
-          Delete
+      <div>
+        <Button
+          onClick={onDownloadFile}
+          disabled={selectedAmount !== 1}
+          loading={isLoading}
+          icon={<DownloadOutlined />}
+        >
+          Download
         </Button>
-      </Popconfirm>
+
+        <Popconfirm
+          title="Remove file(s) ?"
+          description="All files will be moved to trah can"
+          okText="Yes"
+          cancelText="No"
+          disabled={!isActive}
+          onConfirm={onClickRemove}
+        >
+          <Button disabled={!isActive} type="primary" danger loading={isLoading}>
+            Remove
+          </Button>
+        </Popconfirm>
+      </div>
+      <Button type="dashed" danger onClick={onRemoveAll}>
+        Remove all
+      </Button>
     </div>
   );
 };

@@ -6,9 +6,12 @@ import { LoginFormDTO, RegisterFormDTO } from "@/api/dto/auth.dto";
 import { setCookie } from "nookies";
 import * as Api from "@/api";
 import { ParsedError, RegisterErrors } from "@/types";
+import { useRouter } from "next/router";
 
 export const RegisterForm: React.FC = () => {
   const [serverError, setServerErrors] = useState<null | RegisterErrors>(null);
+
+  const router = useRouter();
 
   const onSubmit = useCallback(async (values: RegisterFormDTO & { confirm: string }) => {
     try {
@@ -22,6 +25,8 @@ export const RegisterForm: React.FC = () => {
       });
 
       setCookie(null, "_token", token, { path: "/" });
+
+      router.push("/dashboard");
     } catch (error) {
       if (error instanceof Error) {
         notification.error({

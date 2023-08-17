@@ -56,8 +56,18 @@ export class FilesController {
     return this.filesService.create(file, userId);
   }
 
-  @Delete()
+  @Post('restore')
+  restore(@UserId() userId: number, @Query('ids') ids: string) {
+    return this.filesService.restore(userId, ids);
+  }
+
+  @Delete('remove')
   remove(@UserId() userId: number, @Query('ids') ids: string) {
     return this.filesService.remove(userId, ids);
+  }
+
+  @Delete('delete')
+  delete(@UserId() userId: number, @Query('ids') ids: string) {
+    return this.filesService.delete(userId, ids);
   }
 }
