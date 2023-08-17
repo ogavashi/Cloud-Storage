@@ -20,7 +20,7 @@ export const Header = () => {
 
   const handleLogout = useCallback(() => {
     Api.auth.logout();
-    location.href = "/";
+    location.href = "/dashboard/auth";
   }, [Api]);
 
   return (
