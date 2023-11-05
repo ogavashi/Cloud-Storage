@@ -4,6 +4,12 @@ import { parseCookies } from "nookies";
 import * as utils from "@/utils";
 
 const handleAxiosError = (error: any) => {
+  const { code } = error;
+
+  if (code === "ERR_NETWORK") {
+    throw new Error("Check your connection");
+  }
+
   const errorData = error.response?.data;
 
   const parsedErrors = utils.parseErrors(errorData) || "An error has occurred.";
@@ -29,7 +35,9 @@ axios.interceptors.request.use((config) => {
 
 axios.interceptors.response.use(
   (response) => response,
-  (error) => Promise.reject(handleAxiosError(error))
+  (error) => {
+    Promise.reject(handleAxiosError(error));
+  }
 );
 
 export default axios;
